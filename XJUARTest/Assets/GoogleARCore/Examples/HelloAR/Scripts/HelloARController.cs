@@ -29,7 +29,7 @@ namespace GoogleARCore.Examples.HelloAR
     // Set up touch input propagation while using Instant Preview in the editor.
     using Input = InstantPreviewInput;
 #endif
-
+    
     /// <summary>
     /// Controls the HelloAR example.
     /// </summary>
@@ -70,7 +70,19 @@ namespace GoogleARCore.Examples.HelloAR
         /// 保存摄像机位置信息
         /// </summary>
         private Queue<Vector3> positions = new Queue<Vector3>();
-        float velocity = 0;
+        private float velocity = 0;
+        public float Velocity
+        {
+            get
+            {
+                return velocity;
+            }
+
+            set
+            {
+                velocity = value;
+            }
+        }
 
         /// <summary>
         /// True if the app is in the process of quitting due to an ARCore connection error, otherwise false.
@@ -104,7 +116,7 @@ namespace GoogleARCore.Examples.HelloAR
             {
                 lastPosition =  positions.Dequeue();
                 velocity = (lastPosition - Frame.Pose.position).magnitude*20;
-                Debug.Log("手机当前速度为"+velocity);
+                //Debug.Log("手机当前速度为"+velocity);
             }
             positions.Enqueue(Frame.Pose.position);
 
@@ -114,7 +126,7 @@ namespace GoogleARCore.Examples.HelloAR
             {
                 return;
             }
-
+            
             // Raycast against the location the player touched to search for planes.
             TrackableHit hit;
             TrackableHitFlags raycastFilter = TrackableHitFlags.PlaneWithinPolygon |
