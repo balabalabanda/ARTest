@@ -67,6 +67,12 @@ namespace GoogleARCore.Examples.HelloAR
         private List<DetectedPlane> m_AllPlanes = new List<DetectedPlane>();
 
         /// <summary>
+        /// 保存摄像机位置信息
+        /// </summary>
+        private Queue<Vector3> positions = new Queue<Vector3>();
+        float velocity = 0;
+
+        /// <summary>
         /// True if the app is in the process of quitting due to an ARCore connection error, otherwise false.
         /// </summary>
         private bool m_IsQuitting = false;
@@ -91,6 +97,16 @@ namespace GoogleARCore.Examples.HelloAR
             }
 
             SearchingForPlaneUI.SetActive(showSearchingUI);
+
+            //计算手机当前速度
+            Vector3 lastPosition;
+            if (positions.Count>30)
+            {
+                lastPosition =  positions.Dequeue();
+                velocity = (lastPosition - Frame.Pose.position).magnitude*20;
+                Debug.Log("手机当前速度为"+velocity);
+            }
+            positions.Enqueue(Frame.Pose.position);
 
             // If the player has not touched the screen, we are done with this update.
             Touch touch;
